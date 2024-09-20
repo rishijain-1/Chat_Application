@@ -5,9 +5,6 @@ import ChatListHeader from './chatListHeader';
 
 const ChatList: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   return (
     <>
@@ -25,15 +22,9 @@ const ChatList: React.FC = () => {
         >
           Search
         </button>
+        {/** Show the User Chat List */}
 
-        {loading && <p className="mt-2 text-center">Loading...</p>}
-        {error && <p className="mt-2 text-red-500 text-center">{error}</p>}
-
-        <ul className="mt-4">
-          {results.map((user) => (
-            <li key={user.id} className="p-2 border-b text-center">{user.name}</li> // Adjust based on actual user structure
-          ))}
-        </ul>
+        
       </div>
     </>
   );
