@@ -2,7 +2,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/app/api/auth/session";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -27,8 +26,6 @@ const Login = () => {
     if (result?.error) {
       setError(result.error);
     } else if (result?.ok) {
-      const session = await getCurrentUser();
-      console.log(session);
       router.push("/main");
     }
   };
