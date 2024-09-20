@@ -1,56 +1,78 @@
-'use client'
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useForm } from 'react-hook-form';
+'use client';
+import React, { useState, useEffect } from 'react';
+import axios, { AxiosError } from 'axios';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/app/api/auth/session';
-import { ChatUser, useChat } from '@/context/ChatContext';  // Import context
-
-interface SearchFormData {
-  query: string;
-}
+import { ChatUser, useChat } from '@/context/ChatContext';
 
 const NewChat = () => {
-  const { register, handleSubmit, reset } = useForm<SearchFormData>();
+  const [query, setQuery] = useState('');
   const [results, setResults] = useState<ChatUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
-  const { setUser } = useChat();  // Get the setUser function from context
+  const { setUser } = useChat();
 
-  const onSubmit = async (data: SearchFormData) => {
-    setLoading(true);
-    setError(null);
-    const session = await getCurrentUser();
-    const token = session?.accessToken;
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: string[]) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
 
-    if (!token) {
-      setError('Access token is missing');
-      setLoading(false);
+  const searchUsers = async (searchQuery: string) => {
+    if (!searchQuery) {
+      setResults([]);
       return;
     }
 
+    setLoading(true);
+    setError(null);
+
     try {
+      const session = await getCurrentUser();
+      const token = session?.accessToken;
+
+      if (!token) {
+        setError('Access token is missing');
+        setLoading(false);
+        return;
+      }
+
       const response = await axios.get('/api/search', {
-        params: { query: data.query },
+        params: { query: searchQuery },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setResults(response.data.user);  // Assuming your response contains a 'user' array
-    } catch (err ) {
-      setError((err as Error).message|| 'Failed to fetch results');
+
+      setResults(response.data.user);
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      if (axiosError.response && axiosError.response.status === 404) {
+        setError('No users found');
+      } else {
+        setError('Failed to fetch results');
+      }
     } finally {
       setLoading(false);
-      reset();
     }
   };
 
-  // Navigate to chat page with context
+  // Debounced search function
+  const debouncedSearch = debounce(searchUsers, 300);
+
+  useEffect(() => {
+    debouncedSearch(query);
+  }, [query]);
+
   const handleStartChat = (user: ChatUser) => {
-    setUser(user);  // Pass user to setUser function
+    setUser(user);
     router.push('/main');
   };
 
@@ -59,23 +81,22 @@ const NewChat = () => {
       <div className="max-w-lg w-full bg-white pt-8 p-6 shadow-lg rounded-md">
         <h1 className="text-2xl font-bold text-center mb-6">Start a New Chat</h1>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-2 mb-6">
+        <div className="flex items-center space-x-2 mb-6">
           <input
-            {...register('query', { required: true })}
             type="text"
             placeholder="Search for users"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             className="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-600"
           />
-          <button type="submit" className="p-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-            <FaSearch />
-          </button>
-        </form>
+          <FaSearch className="text-gray-500" />
+        </div>
 
         {loading && <p className="text-gray-500 text-center">Searching...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
         
         <div className="space-y-4">
-          {results && results.length > 0 ? (
+          {results.length > 0 ? (
             results.map((user: ChatUser) => (
               <div key={user.id} className="flex items-center p-3 border rounded-md">
                 <div className="flex-grow">
@@ -83,7 +104,7 @@ const NewChat = () => {
                   <p className="text-sm text-gray-500">{user.email}</p>
                 </div>
                 <button 
-                  onClick={() => handleStartChat(user)}  // Pass user object
+                  onClick={() => handleStartChat(user)}
                   className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700">
                   Start Chat
                 </button>
