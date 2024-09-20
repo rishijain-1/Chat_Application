@@ -1,28 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-export default async function registerHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
-    const { name, email, password, password_confirmation } = req.body;
+export async function POST(req: NextRequest) {
+  try {
+    const { name, email, password, password_confirmation,designation } = await req.json();
 
-    try {
-      // Call external API to register the user
-      const response = await axios.post("http://206.1.60.20/api/auth/register", {
-        name,
-        email,
-        password,
-        password_confirmation,
-      });
+    const response = await axios.post(`${process.env.API_URL}/api/auth/register`, {
+      name,
+      email,
+      password,
+      password_confirmation,
+      designation,
+    });
 
-      return res.status(200).json(response.data);
-    } catch (error: any) {
+    return NextResponse.json(response.data);
+  } catch (error) {
+    console.error(error); 
 
-      return res.status(400).json({
-        message: error.response?.data?.message || "Registration failed",
-      });
-    }
-  } else {
-    // Return 405 if the method is not POST
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return NextResponse.json({
+      message: (error as Error).message || "Registration failed",
+    }, { status: 400 });
   }
 }
