@@ -12,7 +12,11 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const res = await fetch("http://206.1.60.20/api/auth/login", {
+         
+          const loginUrl = `${process.env.API_URL}/api/auth/login`; // Rewritten to ensure it's clean
+        
+
+          const res = await fetch(loginUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -22,7 +26,6 @@ export const authOptions: NextAuthOptions = {
               password: credentials?.password,
             }),
           });
-
           const data = await res.json();
 
           if (res.ok && data.token) {
@@ -31,7 +34,7 @@ export const authOptions: NextAuthOptions = {
             throw new Error(data.message || "Login failed");
           }
         } catch (error) {
-          console.error("Login error:", error);
+         
           return null;
         }
       },
@@ -40,10 +43,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user?.token) {
-        token.accessToken = user.token.toString(); 
-        console.log("Access token: ", token);// Convert to string
+        token.accessToken = user.token.toString();
+     
       }
-      console.log(token);
       return token;
     },
     async session({ session, token }) {
@@ -54,7 +56,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login", // The URL of the login page
+    signIn: "/login", // URL of the login page
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
