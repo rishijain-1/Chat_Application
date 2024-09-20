@@ -1,18 +1,17 @@
-'use client'
+'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation'; // Updated import
 import { FaUserCircle, FaChevronRight } from 'react-icons/fa';
+import { useChat } from '@/context/ChatContext'; 
 
 interface ChatHeaderProps {
   name: string;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ name }) => {
-  const Username =name;
-  const router = useRouter(); 
+  const { removeUser } = useChat(); 
 
   const handleNavigate = () => {
-    router.push('/main'); 
+    removeUser();
   };
 
   return (
@@ -20,7 +19,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ name }) => {
       {/* Left Side: User Icon and Username */}
       <div className="flex items-center space-x-2">
         <FaUserCircle className="text-3xl" />
-        <span className="text-lg font-semibold">{Username}</span>
+        <span className="text-lg font-semibold">{name}</span>
       </div>
 
       {/* Right Side: Right Arrow Icon */}
