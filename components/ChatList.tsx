@@ -13,8 +13,6 @@ const ChatList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [show , setShow]= useState(false);
   
-
-
   return (
     <>
     <ChatListHeader/>
