@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import ChatHeader from './ChatHeader';
 import { useChat } from '@/context/ChatContext';  
+import EmptyChatBox from './EmptyChatBox';
 const getCurrentTime = () => {
   const now = new Date();
   return `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
@@ -22,7 +23,7 @@ const Chat = () => {
   };
 
   if (!user) {
-    return <p>No user selected for chat.</p>;
+    return <EmptyChatBox/>;
   }
 
   return (
@@ -30,12 +31,12 @@ const Chat = () => {
       {/* Chat Box Container */}
       <div className="w-full h-full rounded-t-lg bg-white shadow-lg flex flex-col">
         {/* Chat Header */}
-        <div className="p-4 bg-indigo-600 text-white text-lg font-bold rounded-b-lg">
+        <div className="p-4 bg-indigo-600 text-white text-lg font-bold rounded-tl-lg">
           <ChatHeader name={user.name} />
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 px-6 py-4 overflow-y-auto overflow-x-hidden bg-white">
+        <div className="flex-1 px-6 py-4 overflow-y-auto overflow-x-hidden bg-gradient-to-l from-gray-800 via-gray-900 to-black">
           {messages.length === 0 ? (
             <p className="text-center text-gray-500">No messages yet</p>
           ) : (
