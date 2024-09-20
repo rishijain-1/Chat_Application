@@ -13,7 +13,7 @@ interface SearchFormData {
 
 const NewChat = () => {
   const { register, handleSubmit, reset } = useForm<SearchFormData>();
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ChatUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,7 +76,7 @@ const NewChat = () => {
         
         <div className="space-y-4">
           {results && results.length > 0 ? (
-            results.map((user: any) => (
+            results.map((user: ChatUser) => (
               <div key={user.id} className="flex items-center p-3 border rounded-md">
                 <div className="flex-grow">
                   <p className="font-semibold">{user.name}</p>
