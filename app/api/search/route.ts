@@ -1,6 +1,6 @@
 // app/api/search/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -25,10 +25,10 @@ export async function GET(req: NextRequest) {
       },
     });
     return NextResponse.json(response.data, { status: response.status });
-  } catch (error: any) {
+  } catch (error: AxiosError | unknown) {
     return NextResponse.json(
-      { message: error.response?.data?.message || 'Failed to fetch data' },
-      { status: error.response?.status || 500 }
+      { message: (error as AxiosError).message || 'Failed to fetch data' },
+      { status: (error as AxiosError).status || 500 }
     );
   }
 }
