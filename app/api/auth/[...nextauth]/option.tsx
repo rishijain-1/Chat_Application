@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
          
-          const loginUrl = `${process.env.API_URL}/api/auth/login`; // Rewritten to ensure it's clean
+          const loginUrl = `${process.env.API_URL}/api/auth/login`; 
         
 
           const res = await fetch(loginUrl, {
