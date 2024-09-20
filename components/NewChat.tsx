@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/app/api/auth/session';
-import { useChat } from '@/context/ChatContext';  // Import context
+import { ChatUser, useChat } from '@/context/ChatContext';  // Import context
 
 interface SearchFormData {
   query: string;
@@ -40,8 +40,8 @@ const NewChat = () => {
         },
       });
       setResults(response.data.user);  // Assuming your response contains a 'user' array
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to fetch results');
+    } catch (err ) {
+      setError((err as Error).message|| 'Failed to fetch results');
     } finally {
       setLoading(false);
       reset();
@@ -49,7 +49,7 @@ const NewChat = () => {
   };
 
   // Navigate to chat page with context
-  const handleStartChat = (user: any) => {
+  const handleStartChat = (user: ChatUser) => {
     setUser(user);  // Pass user to setUser function
     router.push('/main');
   };
