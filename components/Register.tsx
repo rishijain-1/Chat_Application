@@ -53,7 +53,7 @@ const Register: React.FC = () => {
         const error = await res.json();
         setErrorMessage(error.message || "An unknown error occurred");
       }
-    } catch (error) {
+    } catch{
       setErrorMessage("An error occurred during registration.");
     }
   };
