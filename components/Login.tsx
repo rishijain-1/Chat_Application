@@ -1,61 +1,89 @@
 'use client'
-import { useState } from "react";
-import {  signIn } from "next-auth/react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/app/api/auth/session";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-   
-    
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const result = await signIn("credentials", {
       redirect: false,
-      email,
-      password,
+      email: data.email,
+      password: data.password,
     });
 
     if (result?.error) {
       setError(result.error);
     } else if (result?.ok) {
-        const session = await getCurrentUser();
-        console.log(session);
-        router.push("/chat");
+      const session = await getCurrentUser();
+      console.log(session);
+      router.push("/main");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="w-full max-w-md p-8 space-y-6 bg-gray-500 rounded-lg shadow-md">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-cyan-200 via-sky-500 to-blue-500">
+      <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-white text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="relative">
+            <label htmlFor="email" className="flex items-center text-white text-sm font-medium mb-1">
               Email
             </label>
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 mt-1 border text-black rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                  message: "Invalid email address",
+                },
+              })}
+              className="w-full p-2 rounded-md outline-none text-black"
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-white">
+          <div className="relative">
+            <label htmlFor="password" className="flex items-center text-white text-sm font-medium mb-1">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 mt-1 border text-black rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            <div className="flex items-center border-none rounded-md relative">
+              <input
+                type={showPassword ? "text" : "password"} // Toggle input type based on state
+                id="password"
+                placeholder="Password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className="w-full p-2 rounded-md outline-none text-black"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                className="absolute right-4 text-black"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+              </button>
+            </div>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <div>
