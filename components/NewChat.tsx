@@ -6,18 +6,19 @@ import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/app/api/auth/session';
 import { ChatUser, useChat } from '@/context/ChatContext';
 
-const NewChat = () => {
-  const [query, setQuery] = useState('');
+const NewChat: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<ChatUser[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
   const { setUser } = useChat();
 
-  const debounce = (func: Function, delay: number) => {
+  // Debounce function definition
+  const debounce = <T extends (...args: string[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void => {
     let timeoutId: NodeJS.Timeout;
-    return (...args: string[]) => {
+    return (...args: Parameters<T>): void => {
       if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         func(...args);
@@ -25,7 +26,8 @@ const NewChat = () => {
     };
   };
 
-  const searchUsers = async (searchQuery: string) => {
+  // User search function
+  const searchUsers = async (searchQuery: string): Promise<void> => {
     if (!searchQuery) {
       setResults([]);
       return;
@@ -44,7 +46,7 @@ const NewChat = () => {
         return;
       }
 
-      const response = await axios.get('/api/search', {
+      const response = await axios.get<{ user: ChatUser[] }>('/api/search', {
         params: { query: searchQuery },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,11 +69,13 @@ const NewChat = () => {
   // Debounced search function
   const debouncedSearch = debounce(searchUsers, 300);
 
+  // Effect to handle search
   useEffect(() => {
     debouncedSearch(query);
-  }, [query]);
+  }, [query, debouncedSearch]);
 
-  const handleStartChat = (user: ChatUser) => {
+  // Start chat function
+  const handleStartChat = (user: ChatUser): void => {
     setUser(user);
     router.push('/main');
   };
