@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
     const accessToken = authHeader.split(' ')[1];
 
-    const response = await axios.get(`${URL}/api/user/profile`, {
+    const response = await axios.get(`${URL}/user/profile`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,

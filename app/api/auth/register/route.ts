@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const { name, email, password, password_confirmation,designation } = await req.json();
 
-    const response = await axios.post(`${process.env.API_URL}/api/auth/register`, {
+    const response = await axios.post(`${process.env.API_URL}/auth/register`, {
       name,
       email,
       password,
