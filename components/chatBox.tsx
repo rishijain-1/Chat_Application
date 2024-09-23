@@ -12,6 +12,14 @@ interface Message {
   receiver: string;
   time: string;
 }
+interface ApiResponse {
+  data: {
+    id: number;
+    message: string;
+    receiver_id: string;
+    created_at: string;
+  }[];
+}
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -43,8 +51,8 @@ const Chat: React.FC = () => {
           throw new Error('Failed to fetch messages');
         }
 
-        const data = await response.json();
-        const formattedMessages = data.data.map((message: any) => {
+        const data : ApiResponse  = await response.json();
+        const formattedMessages = data.data.map((message) => {
           const time = new Date(message.created_at);
           return {
             id: message.id,
