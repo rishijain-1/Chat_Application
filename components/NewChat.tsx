@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
@@ -14,25 +14,17 @@ const NewChat: React.FC = () => {
 
   const router = useRouter();
   const { setUser } = useChat();
-
-  // Debounce function definition
-  const debounce = <T extends (...args: string[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: Parameters<T>): void => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
+  const lastQueryRef = useRef<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // User search function
   const searchUsers = async (searchQuery: string): Promise<void> => {
-    if (!searchQuery) {
+    if (searchQuery.length < 2 || searchQuery === lastQueryRef.current) {
       setResults([]);
       return;
     }
 
+    lastQueryRef.current = searchQuery; // Update the last query reference
     setLoading(true);
     setError(null);
 
@@ -66,13 +58,25 @@ const NewChat: React.FC = () => {
     }
   };
 
-  // Debounced search function
-  const debouncedSearch = debounce(searchUsers, 300);
-
-  // Effect to handle search
+  // Debounced search effect
   useEffect(() => {
-    debouncedSearch(query);
-  }, [query, debouncedSearch]);
+    if (query.length >= 2) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        searchUsers(query);
+      }, 300);
+    } else {
+      setResults([]); // Clear results if query is less than 2
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [query]);
 
   // Start chat function
   const handleStartChat = (user: ChatUser): void => {
