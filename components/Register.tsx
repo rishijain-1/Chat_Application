@@ -59,13 +59,14 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-max ">
-      <div className="w-full max-w-md p-8 m-4 space-y-6 bg-white bg-opacity-80 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Register</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="flex items-center justify-center  bg-gray-800  sm:p-2 lg:p-4">
+      <div className="w-full max-w-md bg-gray-800  p-6 sm:p-8 rounded-lg ">
+        <h2 className="text-2xl font-bold text-gray-100 text-center mb-6">Register</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           
+          {/* Name Field */}
           <div>
-            <label htmlFor="name" className="flex items-center text-gray-800 text-sm font-medium mb-1">
+            <label htmlFor="name" className="flex items-center text-gray-100 text-sm font-medium mb-1">
               <FaUser className="text-gray-600 mr-2" />
               Name
             </label>
@@ -74,13 +75,14 @@ const Register: React.FC = () => {
               id="name"
               placeholder="Name"
               {...register("name", { required: "Name is required" })}
-              className="w-full p-2 rounded-md outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
+          {/* Email Field */}
           <div>
-            <label htmlFor="email" className="flex items-center text-gray-800 text-sm font-medium mb-1">
+            <label htmlFor="email" className="flex items-center text-gray-100 text-sm font-medium mb-1">
               <FaEnvelope className="text-gray-600 mr-2" />
               Email
             </label>
@@ -95,13 +97,14 @@ const Register: React.FC = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="w-full p-2 rounded-md outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
+          {/* Designation Field */}
           <div>
-            <label htmlFor="designation" className="flex items-center text-gray-800 text-sm font-medium mb-1">
+            <label htmlFor="designation" className="flex items-center text-gray-100 text-sm font-medium mb-1">
               <FaBriefcase className="text-gray-600 mr-2" />
               Designation
             </label>
@@ -110,18 +113,19 @@ const Register: React.FC = () => {
               id="designation"
               placeholder="Designation"
               {...register("designation", { required: "Designation is required" })}
-              className="w-full p-2 rounded-md outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {errors.designation && <p className="text-red-500 text-sm">{errors.designation.message}</p>}
           </div>
 
+          {/* Password Field */}
           <div className="relative">
-            <label htmlFor="password" className="flex items-center text-gray-800 text-sm font-medium mb-1">
+            <label htmlFor="password" className="flex items-center text-gray-100 text-sm font-medium mb-1">
               <FaLock className="text-gray-600 mr-2" />
               Password
             </label>
             <input
-              type={showPassword ? "text" : "password"} // Toggle input type based on state
+              type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Password"
               {...register("password", {
@@ -131,38 +135,38 @@ const Register: React.FC = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="w-full p-2 rounded-md outline-none text-gray-800 pr-10" // Add padding to make room for the icon
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 sm:mt-4 mt-2 top-1/2 transform -translate-y-1/2 text-gray-600"
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
 
+          {/* Confirm Password Field */}
           <div className="relative">
-            <label htmlFor="password_confirmation" className="flex items-center text-gray-800 text-sm font-medium mb-1">
+            <label htmlFor="password_confirmation" className="flex items-center text-gray-100 text-sm font-medium mb-1">
               <FaLock className="text-gray-600 mr-2" />
               Confirm Password
             </label>
             <input
-              type={showConfirmPassword ? "text" : "password"} // Toggle input type based on state
+              type={showConfirmPassword ? "text" : "password"}
               id="password_confirmation"
               placeholder="Confirm Password"
               {...register("password_confirmation", {
-                validate: (value: string) =>
-                  value === getValues("password") || "Passwords do not match",
+                validate: (value: string) => value === getValues("password") || "Passwords do not match",
                 required: "Please confirm your password",
               })}
-              className="w-full p-2 rounded-md outline-none text-gray-800 pr-10" // Add padding to make room for the icon
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
+              className="absolute right-4 sm:mt-2 mt-2 top-1/2 transform -translate-y-1/2 text-gray-600"
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -171,24 +175,29 @@ const Register: React.FC = () => {
             )}
           </div>
 
+          {/* Error Message */}
           {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
+          {/* Submit Button */}
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Register
             </button>
           </div>
-          <div className="w-full text-center">
-            <p className="text-gray-800 text-sm">
-              Already have an account? <a className="text-blue-600" href="/login">Login</a>
+
+          {/* Link to Login */}
+          <div className="text-center">
+            <p className="text-gray-100 text-sm">
+              Already have an account? <a href="/login" className="text-indigo-600 hover:underline">Login</a>
             </p>
           </div>
         </form>
       </div>
     </div>
+
   );
 };
 
