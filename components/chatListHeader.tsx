@@ -5,25 +5,26 @@ import { FaUserCircle, FaPlusCircle } from 'react-icons/fa';
 
 const ChatListHeader = () => {
   const router = useRouter(); 
-  const {loginUser} =useChat();
+  const { loginUser } = useChat();
 
   const handleNewChat = () => {
     router.push('/newChat'); 
   };
 
   return (
-    <div className="flex justify-between items-center p-2 rounded-b-lg bg-gray-200  text-white shadow-lg">
+    <div className="flex justify-between text-xs md:text-sm items-center p-4 bg-gray-200 text-white shadow-lg rounded-b-lg">
       <div className="flex items-center space-x-2">
-        <FaUserCircle className="text-3xl text-black" />
-        <span className="text-lg text-black font-semibold">{loginUser?.name}</span>
+        <FaUserCircle className="text-2xl md:text-3xl text-black" /> {/* Adjusted icon size for smaller screens */}
+        <span className="text-xs md:text-sm text-black font-semibold">{loginUser?.name}</span>
       </div>
 
       <button
-        onClick={handleNewChat} // Add click event for redirection
-        className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-full"
+        onClick={handleNewChat}
+        className="flex items-center space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded-full" // Adjusted padding for smaller screens
       >
-        <FaPlusCircle className="text-xl" />
-        <span>New Chat</span>
+        <FaPlusCircle className="text-lg md:text-xl" /> {/* Adjusted icon size for smaller screens */}
+        <span className="hidden sm:inline">New Chat</span> {/* Show text only on small screens and up */}
+        <span className="sm:hidden">+</span> {/* Show icon only on extra small screens */}
       </button>
     </div>
   );
