@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import MyProfile from './MyProfile';
 import { ChevronDownIcon } from '@heroicons/react/24/outline'; // Import the down arrow icon
 import { useRouter } from 'next/navigation';
+import { useChat } from '@/context/ChatContext';
 
 interface Profile {
   data: Profile | PromiseLike<Profile | null> | null;
@@ -28,6 +29,7 @@ async function fetchProfile(token: string): Promise<Profile | null> {
     }
 
     const data: Profile = await response.json();
+    console.log(data.data);
     return data.data;
   } catch (error) {
     console.error('Error fetching profile:', error);
@@ -40,6 +42,9 @@ const Navbar: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showCard, setShowCard] = useState<boolean>(false);
   const route = useRouter();
+
+  const {setLoginUser}=useChat();
+
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -60,7 +65,8 @@ const Navbar: React.FC = () => {
         route.push('/login');
         return;
       }
-
+      console.log (userProfile)
+      setLoginUser(userProfile)
       setProfile(userProfile);
       setLoading(false);
     };
@@ -93,7 +99,7 @@ const Navbar: React.FC = () => {
               <div 
                 className={`transition-all duration-1000 ${showCard ? 'opacity-100 scale-90 ' : 'opacity-0 scale-0 pointer-events-none'}`}
               >
-                {showCard && <MyProfile profile={profile} />}
+                {showCard && <MyProfile  />}
               </div>
             </>
           ) : (

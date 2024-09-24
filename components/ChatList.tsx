@@ -9,7 +9,7 @@ const ChatList: React.FC = () => {
   return (
     <>
       <ChatListHeader />
-      <div className="p-4 bg-gray-100 rounded shadow-md max-w-md mx-auto">
+      <div className="p-4 opacity-90 rounded shadow-md max-w-md mx-auto">
         <input
           type="text"
           value={query}
