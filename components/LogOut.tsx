@@ -1,10 +1,12 @@
 import { getCurrentUser } from '@/app/api/auth/session';
+import { useChat } from '@/context/ChatContext';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const LogOut = () => {
   const route = useRouter(); 
+  const {removeUser}=useChat();
 
   const handleLogout = async () => {
     const session = await getCurrentUser();
@@ -28,6 +30,7 @@ const LogOut = () => {
       if (response.ok) {
         console.log('Logged out successfully');
         signOut({ callbackUrl: '/login' });
+        removeUser();
       } else {
         const errorData = await response.json();
         console.error('Logout failed:', errorData.message);
