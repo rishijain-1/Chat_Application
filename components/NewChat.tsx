@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
@@ -85,35 +85,35 @@ const NewChat: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center shadow-2xl px-4">
       <div className="max-w-lg w-full bg-white pt-8 p-6 shadow-lg rounded-md">
         <h1 className="text-2xl font-bold text-center mb-6">Start a New Chat</h1>
-        
-        <div className="flex items-center space-x-2 mb-6 shadow-xl">
+
+        <div className="flex items-center space-x-2 mb-6 shadow-xl w-full sm:max-w-lg mx-auto">
           <input
             type="text"
             placeholder="Search for users"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-600"
+            className="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-600 w-full"
           />
-          <FaSearch className="text-gray-500" />
+          <FaSearch className="text-gray-500 w-5 h-5 sm:w-6 sm:h-6 cursor-pointer" />
         </div>
 
         {loading && <p className="text-gray-500 text-center">Searching...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
-        
-        <div className="space-y-4 ">
+
+        <div className="space-y-4">
           {results.length > 0 ? (
             results.map((user: ChatUser) => (
-              <div key={user.id} className="flex items-center p-3 border rounded-md">
-                <div className="flex-grow">
-                  <p className="font-semibold">{user.name}</p>
+              <div key={user.id} className="flex flex-col sm:flex-row items-center p-3 border rounded-md">
+                <div className="flex-grow text-center mb-2 sm:mb-0 sm:mr-4">
+                  <p className="font-semibold text-lg">{user.name}</p>
                   <p className="text-sm text-gray-500">{user.email}</p>
                 </div>
                 <button 
                   onClick={() => handleStartChat(user)}
-                  className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700">
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
                   Start Chat
                 </button>
               </div>
@@ -122,6 +122,7 @@ const NewChat: React.FC = () => {
             !loading && <p className="text-gray-500 text-center">No users found</p>
           )}
         </div>
+
       </div>
     </div>
   );
