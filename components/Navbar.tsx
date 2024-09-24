@@ -65,14 +65,13 @@ const Navbar: React.FC = () => {
         route.push('/login');
         return;
       }
-      console.log (userProfile)
       setLoginUser(userProfile)
       setProfile(userProfile);
       setLoading(false);
     };
 
     getUserProfile();
-  }, [route]);
+  }, [route,setLoginUser]);
 
   const toggle = () => {
     setShowCard((prev) => !prev);
