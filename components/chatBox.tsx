@@ -52,7 +52,6 @@ const Chat: React.FC = () => {
         }
 
         const data : ApiResponse  = await response.json();
-        console.log(data);
         const formattedMessages = data.data.map((message) => {
           const time = new Date(message.created_at);
           return {
@@ -119,8 +118,8 @@ const Chat: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
-
       const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Failed to send message. Please try again.');
