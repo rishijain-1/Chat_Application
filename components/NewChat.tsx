@@ -85,11 +85,11 @@ const NewChat: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-200 via-sky-500 to-blue-500">
+    <div className="min-h-screen flex items-center justify-center shadow-2xl">
       <div className="max-w-lg w-full bg-white pt-8 p-6 shadow-lg rounded-md">
         <h1 className="text-2xl font-bold text-center mb-6">Start a New Chat</h1>
         
-        <div className="flex items-center space-x-2 mb-6">
+        <div className="flex items-center space-x-2 mb-6 shadow-xl">
           <input
             type="text"
             placeholder="Search for users"
@@ -103,7 +103,7 @@ const NewChat: React.FC = () => {
         {loading && <p className="text-gray-500 text-center">Searching...</p>}
         {error && <p className="text-red-500 text-center">{error}</p>}
         
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {results.length > 0 ? (
             results.map((user: ChatUser) => (
               <div key={user.id} className="flex items-center p-3 border rounded-md">

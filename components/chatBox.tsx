@@ -136,8 +136,8 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-[90vh] bg-gray-100">
-      <div className="w-full h-full rounded-t-lg bg-white shadow-lg flex flex-col">
+    <div className="flex items-center justify-center w-full h-[90vh] ">
+      <div className="w-full h-full rounded-t-lg shadow-lg flex flex-col">
         <div className="p-4 bg-indigo-600 text-white text-lg font-bold rounded-tl-lg">
           <ChatHeader name={user.name} />
         </div>
@@ -163,7 +163,7 @@ const Chat: React.FC = () => {
           )}
         </div>
 
-        <div className="p-4 bg-gray-200 flex items-center rounded-b-lg">
+        <div className="p-4 bg-gray-700 flex items-center rounded-b-lg">
           <textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}

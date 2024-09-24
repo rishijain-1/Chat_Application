@@ -17,7 +17,6 @@ const Main = () => {
           <ChatList />
         </aside>
 
-        {/* Chat Section */}
         <section className="w-full md:w-2/3 h-1/2 md:h-full  shadow-lg  flex flex-col">
           <Chat />
         </section>
