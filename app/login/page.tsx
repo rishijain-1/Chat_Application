@@ -11,7 +11,7 @@ const LoginPage = () => {
       </header>
 
       {/* Login Form */}
-      <main className="w-full max-w-md bg-opacity backdrop-blur-md rounded-lg shadow-xl p-8">
+      <main className="w-full max-w-md bg-opacity backdrop-blur-md rounded-lg p-8">
         
         <Login />
       </main>

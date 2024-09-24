@@ -10,7 +10,7 @@ export default function Home() {
       </header>
 
       {/* Register Form */}
-      <main className="w-full max-w-lg  bg-opacity-90 backdrop-blur-md rounded-lg shadow-xl p-8 transform transition hover:scale-105 duration-300 ease-in-out">
+      <main className="w-full max-w-lg  bg-opacity-90 backdrop-blur-md rounded-lg  p-8 transform transition hover:scale-105 duration-300 ease-in-out">
         <h1 className="text-4xl font-extrabold text-center text-gray-200 mb-6">
           Create Account
         </h1>
