@@ -50,28 +50,43 @@ const Navbar: React.FC = () => {
     const getUserProfile = async () => {
       const session = await getCurrentUser();
       const token = session?.accessToken;
-
+  
       if (!token) {
         alert('Please login');
         route.push('/login');
         return;
       }
-
-      
+  
       const userProfile = await fetchProfile(token);
-
+  
       if (!userProfile) {
         alert('Please login');
         route.push('/login');
         return;
       }
-      setLoginUser(userProfile)
-      setProfile(userProfile);
+  
+      // Fetch existing users array from localStorage (or initialize an empty array if none exist)
+      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+  
+      // Check if the user with this ID is already in the users array
+      const userExists = existingUsers.some((user: { id: string }) => user.id === userProfile.id);
+  
+      if (!userExists) {
+        // If the user doesn't exist, add the new user object to the users array
+        const updatedUsers = [...existingUsers, userProfile];
+  
+        // Save the updated users array back to localStorage
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+      }
+  
+      setLoginUser(userProfile);  // Set user in context
+      setProfile(userProfile);    // Set user profile in state
       setLoading(false);
     };
-
+  
     getUserProfile();
-  }, [route,setLoginUser]);
+  }, [route, setLoginUser]);
+  
 
   const toggle = () => {
     setShowCard((prev) => !prev);
