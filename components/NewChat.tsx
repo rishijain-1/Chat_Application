@@ -14,6 +14,7 @@ const NewChat: React.FC = () => {
 
   const router = useRouter();
   const { setUser } = useChat();
+  const {loginUser}=useChat();
   const lastQueryRef = useRef<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -68,7 +69,7 @@ const NewChat: React.FC = () => {
         searchUsers(query);
       }, 300);
     } else {
-      setResults([]); // Clear results if query is less than 2
+      setResults([]);
     }
 
     return () => {
@@ -79,10 +80,43 @@ const NewChat: React.FC = () => {
   }, [query]);
 
   // Start chat function
-  const handleStartChat = (user: ChatUser): void => {
-    setUser(user);
+  const handleStartChat = (newChatUser: ChatUser): void => {
+    
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+  
+    const loggedInUserIndex = existingUsers.findIndex((user: { id: string }) => user.id === loginUser?.id);
+  
+    if (loggedInUserIndex !== -1) {
+      const loggedInUser = existingUsers[loggedInUserIndex];
+  
+
+      if (!loggedInUser.chatList) {
+        loggedInUser.chatList = [];
+      }
+  
+     
+      const chatExists = loggedInUser.chatList.some((chatUser: ChatUser) => chatUser.id === newChatUser.id);
+  
+      if (!chatExists) {
+       
+        loggedInUser.chatList.push(newChatUser);
+  
+        existingUsers[loggedInUserIndex] = loggedInUser;
+        localStorage.setItem('users', JSON.stringify(existingUsers));
+  
+        alert('Chat started and saved to localStorage.');
+      } else {
+        alert('Chat already exists in chatList.');
+      }
+    } else {
+      alert('Logged-in user not found in localStorage.');
+    }
+  
+    setUser(newChatUser);
     router.push('/main');
   };
+  
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center shadow-2xl px-4">
