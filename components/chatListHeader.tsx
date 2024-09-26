@@ -12,7 +12,7 @@ const ChatListHeader = () => {
   };
 
   return (
-    <div className="flex justify-between text-xs md:text-sm items-center px-2 py-4 bg-gray-200 text-white shadow-lg rounded-b-lg">
+    <div className="flex justify-between text-xs md:text-sm items-center px-2 py-4 bg-gray-200 text-white shadow-lg rounded-lg">
       <div className="flex items-center space-x-2">
         <FaUserCircle className="text-sm md:text-3xl text-black" /> {/* Adjusted icon size for smaller screens */}
         <span className="text-xs md:text-xsm text-black font-semibold">{loginUser?.name}</span>

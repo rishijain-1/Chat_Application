@@ -18,6 +18,7 @@ export interface ChatContextProps {
   loginUser: LoginUser | null;
   setLoginUser: (user: LoginUser) => void;
   removeUser: () => void; 
+  removeLoginUser: () => void
 }
 
 const ChatContext = createContext<ChatContextProps | undefined>(undefined);
@@ -28,11 +29,14 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const removeUser = () => {
     setUser(null); 
-    setLoginUser(null)
+    
   };
+  const removeLoginUser=() => {
+    setLoginUser(null)
+  }
 
   return (
-    <ChatContext.Provider value={{ user, setUser, removeUser,loginUser,setLoginUser }}>
+    <ChatContext.Provider value={{ user, setUser, removeUser,loginUser,setLoginUser,removeLoginUser }}>
       {children}
     </ChatContext.Provider>
   );
